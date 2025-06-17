@@ -95,24 +95,36 @@ Cada cartão de 15 números custa **R$ 3,00**. O programa `custo.py` calcula:
 *Os valores exatos dependem da execução da heurística.*
 
 ---
-
 ## 💡 Por que utilizamos uma heurística?
 
-O problema é uma instância do **Set Cover Problem**, que é **NP-difícil**.  
-Tentar resolver o problema de forma exata exigiria:
+O problema enfrentado neste projeto é uma variação do **Set Cover Problem** — um problema clássico da ciência da computação que pertence à classe dos problemas **NP-difíceis**. Isso significa que, até hoje, **não existe um algoritmo eficiente conhecido** para resolvê-lo de forma exata em tempo viável, especialmente em larga escala.
 
-- Testar todas as \( \binom{25}{15} = 3.268.760 \) apostas possíveis
-- Gerar todos os subconjuntos possíveis (ex: de até 50 apostas entre 100 mil)
+### ❌ Por que não usar força bruta?
 
-Exemplo:
-\[
-\sum_{k=1}^{50} \binom{100000}{k}
-\]
-Mesmo com apenas 50 apostas, o número de combinações já ultrapassa \( 10^{90} \).
+Uma solução exata exigiria:
 
-🔒 Tentar uma abordagem exata levaria **milhões de anos**, mesmo com supercomputadores.
+- Testar todas as **3.268.760** apostas possíveis de 15 números (combinatória de 25 elementos tomados de 15 em 15).
+- Verificar **todos os subconjuntos possíveis** dessas apostas para encontrar o menor grupo que cobre todas as combinações de 11 a 14 números.
 
-✅ A heurística gulosa entrega uma solução **boa o suficiente**, cobrindo 100% dos subconjuntos menores, em **tempo computacional viável** (horas ou dias).
+Agora, imagine que quiséssemos verificar **todas as combinações de até 50 apostas** dentro de um conjunto de 100 mil apostas geradas.  
+O número total de combinações seria:
+
+> **Mais de 10⁹⁰ subconjuntos diferentes**
+
+Esse valor é tão gigantesco que mesmo com supercomputadores modernos, o tempo estimado de execução seria de **milhões de anos**.
+
+---
+
+### ✅ Por que usamos a heurística gulosa?
+
+A heurística gulosa oferece uma solução **aproximada**, porém com ótimo desempenho na prática. Ela encontra apostas de 15 números que cobrem o maior número possível de subconjuntos ainda não cobertos, repetindo esse processo até completar a cobertura.
+
+Resultado:  
+- ⚡ Tempo de execução razoável (horas ou dias em vez de séculos)
+- ✅ Cobertura 100% garantida
+- 🔧 Complexidade muito mais gerenciável: cerca de O(n × m), onde n ≈ 3 milhões e m ≈ 5 milhões.
+
+Por isso, a heurística não é apenas uma escolha: **é uma necessidade computacional** para este problema.
 
 ---
 
