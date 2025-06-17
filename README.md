@@ -1,49 +1,130 @@
-# Trabalho de Complexidade de Algoritmos - Lotofácil
+# 🎯 Trabalho de Complexidade de Algoritmos - Lotofácil
 
-## Descrição Geral
-Este projeto resolve o problema de cobertura de subconjuntos para a Lotofácil, conforme proposto na disciplina de Complexidade de Algoritmos. O objetivo é gerar todas as combinações possíveis de apostas e, a partir delas, encontrar subconjuntos mínimos de apostas de 15 números que cubram todas as combinações menores (de 11 a 14 números), além de analisar a complexidade e o custo financeiro dessas soluções.
+## 📘 Descrição Geral
 
-## Estrutura dos Arquivos
-
-- **main.py**: Arquivo principal. Apresenta um menu interativo para o usuário escolher qual etapa executar. Centraliza a chamada das funções dos demais módulos.
-- **combinacoes.py**: Responsável pela geração e salvamento de todas as combinações possíveis de 11 a 15 números (PROGRAMA 1). Gera arquivos S11.txt, S12.txt, S13.txt, S14.txt e S15.txt.
-- **cobertura.py**: Implementa a heurística gulosa para encontrar subconjuntos de apostas de 15 números que cubram todas as combinações de 11, 12, 13 ou 14 números (PROGRAMAS 2 a 5). Gera arquivos SB15_11.txt, SB15_12.txt, SB15_13.txt e SB15_14.txt.
-- **analise.py**: Apresenta a análise de complexidade de tempo do algoritmo guloso utilizado para a cobertura dos subconjuntos (ITEM 6).
-- **custo.py**: Calcula o custo financeiro para jogar todos os subconjuntos de apostas encontrados, considerando o valor de R$ 3,00 por aposta (ITEM 7).
-- **randomico.py**: Implementa uma abordagem randômica alternativa para o problema de cobertura, utilizada para comparação e justificativa da escolha da heurística gulosa.
-- **relatorio_justificativa.md**: Relatório formal justificando a escolha do algoritmo guloso e explicando por que outras abordagens não são viáveis ou eficientes para o problema.
-
-## Funcionamento do Projeto
-
-1. **Geração das Combinações**
-   - O usuário pode gerar todas as combinações possíveis de 11 a 15 números, que são salvas em arquivos de texto. Cada linha representa uma combinação distinta.
-
-2. **Cobertura dos Subconjuntos**
-   - Utilizando uma heurística gulosa, o programa encontra subconjuntos de apostas de 15 números que cobrem todas as combinações menores (S11, S12, S13, S14). O processo é computacionalmente intensivo e pode levar horas ou dias para grandes valores de t.
-
-3. **Análise de Complexidade**
-   - O projeto apresenta uma análise formal da complexidade de tempo do algoritmo guloso, detalhando as etapas e justificando a escolha da abordagem.
-
-4. **Cálculo do Custo Financeiro**
-   - O programa calcula o custo total para jogar todos os subconjuntos de apostas gerados, multiplicando o número de apostas pelo valor unitário do cartão.
-
-5. **Abordagem Randômica (Opcional)**
-   - O arquivo `randomico.py` demonstra uma abordagem alternativa baseada em sorteio aleatório de apostas, servindo para comparação e justificativa teórica.
-
-## Como Executar
-
-1. Execute o arquivo `main.py`.
-2. Siga o menu interativo para escolher a etapa desejada.
-3. Os arquivos gerados estarão na mesma pasta do projeto.
-
-> **Atenção:** As etapas de cobertura (PROGRAMAS 2 a 5) podem demandar muito tempo e memória, dependendo do tamanho do subconjunto a ser coberto.
-
-## Observações Finais
-- O projeto está modularizado para facilitar a compreensão, manutenção e apresentação.
-- Comentários detalhados foram adicionados em todos os arquivos para explicar o funcionamento das funções e a lógica dos algoritmos.
-- O relatório de justificativa pode ser utilizado para fundamentar a escolha da abordagem no contexto acadêmico.
+Este projeto resolve o problema de **cobertura de subconjuntos para a Lotofácil**, proposto na disciplina de Complexidade de Algoritmos. O objetivo é gerar todas as combinações possíveis de apostas e, a partir delas, encontrar subconjuntos mínimos de apostas de 15 números que **cobrem todas as combinações menores** (de 11 a 14 números), além de analisar a **complexidade de tempo** e o **custo financeiro** dessas soluções.
 
 ---
 
-Desenvolvido para a disciplina de Complexidade de Algoritmos - 2025/1
-Professor: Edson Emílio Scalabrin
+## 📂 Estrutura dos Arquivos
+
+- **main.py**: Menu interativo principal. Permite executar cada etapa do projeto.
+- **combinacoes.py**: Gera todas as combinações possíveis de 11 a 15 números. (PROGRAMA 1)
+- **cobertura.py**: Aplica heurística gulosa para encontrar subconjuntos de 15 números que cobrem todas as combinações de 11 a 14 números. (PROGRAMAS 2 a 5)
+- **analise.py**: Contém a análise de complexidade de tempo dos algoritmos de cobertura. (ITEM 6)
+- **custo.py**: Calcula o custo financeiro total para jogar os subconjuntos de apostas encontrados. (ITEM 7)
+- **randomico.py**: Implementa uma abordagem randômica alternativa para fins comparativos.
+- **relatorio_justificativa.md**: Justificativa técnica e comparativa entre abordagens heurísticas e exatas.
+
+---
+
+## ⚙️ Funcionamento do Projeto
+
+### 1. Geração das Combinações (PROGRAMA 1)
+
+Gera e salva os seguintes conjuntos:
+- **S15** → 3.268.760 combinações de 15 números
+- **S14** → 4.457.400 combinações de 14 números
+- **S13** → 5.200.300 combinações de 13 números
+- **S12** → 5.200.300 combinações de 12 números
+- **S11** → 4.457.400 combinações de 11 números
+
+### 2. Cobertura dos Subconjuntos (PROGRAMAS 2–5)
+
+Geração dos subconjuntos SB15_k (k = 11 a 14), usando uma heurística gulosa:
+- **SB15_14** cobre todas as sequências de S14
+- **SB15_13** cobre todas as sequências de S13
+- **SB15_12** cobre todas as sequências de S12
+- **SB15_11** cobre todas as sequências de S11
+
+### 3. Análise de Complexidade (ITEM 6)
+
+Veja seção específica mais abaixo.
+
+### 4. Cálculo do Custo Financeiro (ITEM 7)
+
+Multiplica a quantidade de apostas em cada subconjunto SB15_k por R$ 3,00 (preço oficial da Lotofácil).
+
+### 5. Abordagem Randômica
+
+Arquivo `randomico.py` simula seleção aleatória de apostas, servindo como comparação com a heurística gulosa.
+
+---
+
+## 🧠 Análise de Complexidade de Tempo
+
+A heurística gulosa possui complexidade aproximada de **O(n · m)**, onde:
+
+- **n** é o número de apostas de 15 números (≈ 3.268.760)
+- **m** é o número de subconjuntos a cobrir (S11 a S14)
+
+### PROGRAMA 2 — SB15_14
+
+- Cobertura de 4.457.400 combinações de 14 números
+- Tempo elevado pela grande sobreposição entre subconjuntos
+- Complexidade: `O(3.2M · 4.4M)` (teórico, mas otimizado com intersecções)
+
+### PROGRAMA 3 — SB15_13
+
+- Cobertura de 5.200.300 combinações de 13 números
+- Mais combinações que S14, maior custo computacional
+
+### PROGRAMA 4 — SB15_12
+
+- Cobertura de 5.200.300 combinações de 12 números
+- Mesmo volume que S13, mas com sobreposição menor
+
+### PROGRAMA 5 — SB15_11
+
+- Cobertura de 4.457.400 combinações de 11 números
+- Tende a ser mais intensivo, pois subconjuntos são menores e menos compartilháveis
+
+> ⚠️ Todas essas etapas podem levar de **horas a dias** para serem computadas.
+
+---
+
+## 💵 Custo Financeiro Total
+
+Cada cartão de 15 números custa **R$ 3,00**. O programa `custo.py` calcula:
+
+- **Custo total SB15_14** = quantidade de apostas × R$ 3,00
+- **Custo total SB15_13** = idem
+- **Custo total SB15_12** = idem
+- **Custo total SB15_11** = idem
+
+*Os valores exatos dependem da execução da heurística.*
+
+---
+
+## 💡 Por que utilizamos uma heurística?
+
+O problema é uma instância do **Set Cover Problem**, que é **NP-difícil**.  
+Tentar resolver o problema de forma exata exigiria:
+
+- Testar todas as \( \binom{25}{15} = 3.268.760 \) apostas possíveis
+- Gerar todos os subconjuntos possíveis (ex: de até 50 apostas entre 100 mil)
+
+Exemplo:
+\[
+\sum_{k=1}^{50} \binom{100000}{k}
+\]
+Mesmo com apenas 50 apostas, o número de combinações já ultrapassa \( 10^{90} \).
+
+🔒 Tentar uma abordagem exata levaria **milhões de anos**, mesmo com supercomputadores.
+
+✅ A heurística gulosa entrega uma solução **boa o suficiente**, cobrindo 100% dos subconjuntos menores, em **tempo computacional viável** (horas ou dias).
+
+---
+
+## 🎲 Abordagem Alternativa Randômica
+
+O script `randomico.py` executa tentativas de cobertura aleatória.  
+Essa abordagem **falha em alcançar cobertura total** de forma eficiente, reforçando a escolha da heurística gulosa.
+
+---
+
+## 🖥️ Como Executar
+
+1. Execute `main.py` no terminal:
+   ```bash
+   python main.py
