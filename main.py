@@ -1,66 +1,50 @@
-import sys
-from combinacoes import gerar_combinacoes, encontrar_cobertura
-from arquivos import salvar_em_arquivo
-from utils import logger, medir_tempo, calcular_custo
-
-# Programa 1: Gerar todas as combinações S15 e salvar em S15.txt
-@medir_tempo
-def programa1():
-    print("\n[Programa 1] Gerando combinações S15...")
-    S15 = list(gerar_combinacoes(25, 15))
-    salvar_em_arquivo(S15, "S15.txt")
-    print(f"S15 gerado com sucesso. Total de combinações: {len(S15)}")
-
-
-# Programa 2 a 5: Usam o mesmo algoritmo de cobertura, variando o valor t
-@medir_tempo
-def programa_cobertura(tamanho_subconjunto):
-    print(f"\n[Programa Cobertura] Encontrando SB15_{tamanho_subconjunto}...")
-    # Gera S15: todas as apostas de 15 números do universo [1,25]
-    S15 = list(gerar_combinacoes(25, 15))
-    logger.info(f"S15 gerado com {len(S15)} apostas.")
-    
-    # Executa o algoritmo de cobertura para o valor t informado
-    cobertura = encontrar_cobertura(S15, tamanho_subconjunto)
-    logger.info(f"Cobertura encontrada com {len(cobertura)} apostas.")
-    
-    # Salva resultado num arquivo com nome baseado em t, ex: SB15_14.txt
-    nome_arquivo = f"SB15_{tamanho_subconjunto}.txt"
-    salvar_em_arquivo(cobertura, nome_arquivo)
-    
-    # Calcula custo financeiro
-    calcular_custo(len(cobertura))
-    print(f"Processo de cobertura para t = {tamanho_subconjunto} concluído.\n")
-
-
-def menu():
-    while True:
-        print("\n=== LOTOFÁCIL - COMPLEXIDADE DE ALGORITMOS ===")
-        print("1 - Gerar todas as combinações (Programa 1)")
-        print("2 - Encontrar SB15_14 (Programa 2)")
-        print("3 - Encontrar SB15_13 (Programa 3)")
-        print("4 - Encontrar SB15_12 (Programa 4)")
-        print("5 - Encontrar SB15_11 (Programa 5)")
-        print("0 - Sair")
-    
-        opcao = input("Escolha uma opção: ").strip()
-    
-        if opcao == '1':
-            programa1()
-        elif opcao == '2':
-            programa_cobertura(14)
-        elif opcao == '3':
-            programa_cobertura(13)
-        elif opcao == '4':
-            programa_cobertura(12)
-        elif opcao == '5':
-            programa_cobertura(11)
-        elif opcao == '0':
-            print("Encerrando o programa...")
-            sys.exit(0)
-        else:
-            print("Opção inválida. Tente novamente.")
-
+"""
+Arquivo principal do projeto. Centraliza a execução dos módulos e apresenta o menu interativo.
+"""
+from combinacoes import gerar_e_salvar_combinacoes
+from cobertura import encontrar_conjunto_de_cobertura
+from analise import analisar_complexidade
+from custo import calcular_custo_financeiro
 
 if __name__ == "__main__":
-    menu()
+    # Apresentação inicial
+    print("Trabalho de Complexidade de Algoritmos - Lotofácil")
+    print("Professor: Edson Emílio Scalabrin")
+    print("=" * 50)
+    # Loop do menu interativo
+    while True:
+        print("\nEscolha a operação a ser realizada:")
+        print("\n--- Bloco 1: Geração de Arquivos Base ---")
+        print("1. Gerar TODAS as combinações (S11 a S15) (PROGRAMA 1)")  # combinacoes.py -> gerar_e_salvar_combinacoes
+        print("\n--- Bloco 2: Encontrar Conjuntos de Cobertura (Processo Lento) ---")
+        print("2. Encontrar SB15_14 (Cobre todas as S14) (PROGRAMA 2)")  # cobertura.py -> encontrar_conjunto_de_cobertura
+        print("3. Encontrar SB15_13 (Cobre todas as S13) (PROGRAMA 3)")  # cobertura.py -> encontrar_conjunto_de_cobertura
+        print("4. Encontrar SB15_12 (Cobre todas as S12) (PROGRAMA 4)")  # cobertura.py -> encontrar_conjunto_de_cobertura
+        print("5. Encontrar SB15_11 (Cobre todas as S11) (PROGRAMA 5)")  # cobertura.py -> encontrar_conjunto_de_cobertura
+        print("\n--- Bloco 3: Análise e Resultados ---")
+        print("6. Apresentar Análise de Complexidade (Item 6)")  # analise.py -> analisar_complexidade
+        print("7. Calcular Custo Financeiro dos subconjuntos (Item 7)")  # custo.py -> calcular_custo_financeiro
+        print("0. Sair")
+        escolha = input("\nDigite sua escolha: ")
+        # Chama a função correspondente de acordo com a escolha do usuário
+        if escolha == '1':
+            print("\n--- EXECUTANDO PROGRAMA 1 ---")
+            for p in [15, 14, 13, 12, 11]:
+                gerar_e_salvar_combinacoes(n=25, p=p)
+        elif escolha == '2':
+            encontrar_conjunto_de_cobertura(v=25, k=15, t=14)
+        elif escolha == '3':
+            encontrar_conjunto_de_cobertura(v=25, k=15, t=13)
+        elif escolha == '4':
+            encontrar_conjunto_de_cobertura(v=25, k=15, t=12)
+        elif escolha == '5':
+            encontrar_conjunto_de_cobertura(v=25, k=15, t=11)
+        elif escolha == '6':
+            analisar_complexidade()
+        elif escolha == '7':
+            calcular_custo_financeiro()
+        elif escolha == '0':
+            print("Encerrando o programa.")
+            break
+        else:
+            print("Escolha inválida. Por favor, tente novamente.")

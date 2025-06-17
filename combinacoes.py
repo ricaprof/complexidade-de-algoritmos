@@ -1,67 +1,61 @@
-from itertools import combinations
+"""
+Módulo responsável pela geração de todas as combinações possíveis de números para Lotofácil.
+Corresponde ao PROGRAMA 1 do trabalho.
+"""
+import itertools
 from math import comb
 
+# Universo de números da Lotofácil (1 a 25)
+UNIVERSO_NUMEROS = range(1, 26)
 
-def tuple_to_bitmask(tup):
-    """Converte uma tupla de números em um bitmask inteiro."""
-    mask = 0
-    for number in tup:
-        mask |= (1 << (number - 1))
-    return mask
+# Dicionário com os nomes dos arquivos de saída para cada valor de p
+ARQUIVOS_COMBINACOES = {
+    15: "S15.txt",
+    14: "S14.txt",
+    13: "S13.txt",
+    12: "S12.txt",
+    11: "S11.txt",
+}
 
+# Quantidade esperada de combinações para cada valor de p, conforme o enunciado
+CONTAGENS_ESPERADAS = {
+    15: 3268760,
+    14: 4457400,
+    13: 5200300,
+    12: 5200300,
+    11: 4457400
+}
 
-def gerar_combinacoes(n, p):
-    """Gera todas as combinações de p elementos do conjunto [1, n]."""
-    return list(combinations(range(1, n + 1), p))
-
-
-def t_subsets_bitmask(tamanho):
-    """Gera o conjunto (como bitmasks) de todos os t‑subconjuntos do conjunto [1, 25]."""
-    return {tuple_to_bitmask(c) for c in combinations(range(1, 26), tamanho)}
-
-
-def calcular_t_subsets_de_candidato(candidato, tamanho_subconjunto):
-    """Calcula os bitmasks de todos os t‑subconjuntos de um candidato."""
-    return {tuple_to_bitmask(c) for c in combinations(candidato, tamanho_subconjunto)}
-
-
-def encontrar_cobertura(S_maior, tamanho_subconjunto):
+def gerar_e_salvar_combinacoes(n, p):
     """
-    Encontra um subconjunto de S_maior que cubra todos os subconjuntos de tamanho_subconjunto.
-    Otimização:
-      - Utiliza representação em bitmask para operações rápidas.
-      - Pré-cálculo dos t‑subconjuntos do universo.
-      - Para cada candidato, calcula quantos t‑subconjuntos faltantes ele cobre.
+    Gera todas as combinações C(n, p) e salva em um arquivo de texto.
+    Também verifica se a contagem corresponde ao esperado no documento.
+    
+    Parâmetros:
+    - n: tamanho do universo (deve ser 25)
+    - p: tamanho das combinações (15, 14, 13, 12 ou 11)
     """
-    # Gera os t‑subconjuntos do universo (ficam representados como bitmasks)
-    S_sub = t_subsets_bitmask(tamanho_subconjunto)
-    cobertura = []
+    nome_arquivo = ARQUIVOS_COMBINACOES.get(p)
+    if not nome_arquivo:
+        print(f"Tamanho de combinação {p} não é necessário.")
+        return
 
-    # Converte cada candidato para (tupla, bitmask)
-    S_maior_bit = [(s, tuple_to_bitmask(s)) for s in S_maior]
-
-    while S_sub:
-        melhor = None
-        max_cobertos = 0
-        melhor_subs = None
-
-        # Para cada candidato, compute quantos dos t‑subconjuntos restantes ele cobre
-        for s, s_mask in S_maior_bit:
-            subs_candidato = calcular_t_subsets_de_candidato(s, tamanho_subconjunto)
-            num_cobertos = len(subs_candidato & S_sub)
-            if num_cobertos > max_cobertos:
-                melhor = s
-                max_cobertos = num_cobertos
-                melhor_subs = subs_candidato
-                # Se o candidato cobre todos os seus t‑subconjuntos possíveis, interrompe a busca
-                if max_cobertos == comb(len(s), tamanho_subconjunto):
-                    break
-
-        if melhor is None:
-            break
-
-        cobertura.append(melhor)
-        S_sub -= melhor_subs
-        print(f"Restam {len(S_sub)} subconjuntos a serem cobertos...")
-
-    return cobertura
+    print(f"Iniciando a geração de sequências de {p} números (S{p})...")
+    try:
+        with open(nome_arquivo, "w") as f:
+            count = 0
+            # itertools.combinations gera todas as combinações possíveis de p elementos do universo
+            for combo in itertools.combinations(UNIVERSO_NUMEROS, p):
+                # Escreve a combinação no arquivo, separando os números por espaço
+                f.write(" ".join(map(str, combo)) + "\n")
+                count += 1
+        print(f"Arquivo '{nome_arquivo}' gerado com sucesso.")
+        print(f"Total de combinações geradas: {count}")
+        # Verificação: compara a quantidade gerada com a esperada
+        if count == CONTAGENS_ESPERADAS.get(p):
+            print(f"Contagem VERIFICADA com sucesso com o valor do documento: {CONTAGENS_ESPERADAS[p]}.")
+        else:
+            print(f"AVISO: Contagem {count} difere do valor esperado {CONTAGENS_ESPERADAS.get(p)}.")
+    except Exception as e:
+        print(f"Ocorreu um erro ao gerar o arquivo {nome_arquivo}: {e}")
+    print("-" * 30)
